@@ -1,0 +1,8 @@
+image: fjolsvin/gitpod-nginx-lua
+
+vscode:
+  extensions:
+    - sumneko.lua@0.20.8:hDwwZDq4OYb+UrYPAlvPZA==
+    - hangxingliu.vscode-nginx-conf-hint@0.1.0:UATTe2sTFfCYWQ3jw4IRsw==
+    - william-voyek.vscode-nginx@0.7.2:+sX0d/lVtk8NOQ6/cE63rQ==
+    - raynigon.nginx-formatter@0.0.10:KhidfWaLNLuLbDZQEPV1JQ==
