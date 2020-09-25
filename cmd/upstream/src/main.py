@@ -2,12 +2,12 @@ import logging
 import sys
 import argparse
 # pylint: disable=import-error
-from src.upstream.server.entrypoint import configure_parser as server_parser
-from src.upstream.util.cli import *
-from src.upstream.__init__ import __version__
 
-from src.upstream.util.log import *
-# setting up custom trace debug level
+from .upstream.server.entrypoint import configure_parser as server_parser
+from .upstream.util.cli import *
+from .upstream.__init__ import __version__
+from .upstream.util.log import *
+# # setting up custom trace debug level
 LOGGER = logging.getLogger(__name__)
 logging.addLevelName(logging.DEBUG - 5, 'TRACE')
 addLoggingLevel('TRACE', logging.DEBUG - 5)

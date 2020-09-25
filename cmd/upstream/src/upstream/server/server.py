@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from upstream.util.log import *
+from ..util.log import *
 import logging
 LOGGER = logging.getLogger(__name__)
 

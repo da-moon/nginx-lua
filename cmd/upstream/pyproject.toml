@@ -62,4 +62,5 @@ requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
 
 [tool.poetry.scripts]
-cli = "main:main"
+cli = "src.main:main"
+

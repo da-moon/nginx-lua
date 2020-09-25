@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
 # importing python standard libraries
+from .server import Server
 import sys
 import logging
 # importing our libraries
 from ..util.cli import *
-from upstream.util.log import *
-from .server import Server
+from ..util.log import *
 
 LOGGER = logging.getLogger(__name__)
 
