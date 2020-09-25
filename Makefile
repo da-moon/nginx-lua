@@ -1,40 +1,35 @@
-VERSION   ?= $(shell git describe --tags)
-REVISION  ?= $(shell git rev-parse HEAD)
-BRANCH    ?= $(shell git rev-parse --abbrev-ref HEAD)
-BUILDUSER ?= $(shell id -un)
-BUILDTIME ?= $(shell date '+%Y%m%d-%H:%M:%S')
-MAJORVERSION ?= $(shell git describe --tags --abbrev=0 | sed s/v// |  awk -F. '{print $$1+1".0.0"}')
-MINORVERSION ?= $(shell git describe --tags --abbrev=0 | sed s/v// | awk -F. '{print $$1"."$$2+1".0"}')
-PATCHVERSION ?= $(shell git describe --tags --abbrev=0 | sed s/v// | awk -F. '{print $$1"."$$2"."$$3+1}')
-.PHONY: info
-.SILENT: info
-info:
-	- $(info VERSION = $(VERSION))
-	- $(info REVISION = $(REVISION))
-	- $(info BRANCH = $(BRANCH))
-	- $(info BUILDUSER = $(BUILDUSER))
-	- $(info BUILDTIME = $(BUILDTIME))
-	- $(info MAJORVERSION = $(MAJORVERSION))
-	- $(info MINORVERSION = $(MINORVERSION))
-	- $(info PATCHVERSION = $(PATCHVERSION))
-.PHONY: release-major
-.SILENT: release-major
-release-major:
-	- git checkout master
-	- git pull
-	- git tag -a v$(MAJORVERSION) -m 'release $(MAJORVERSION)'
-	- git push origin --tags
-.PHONY: release-minor
-.SILENT: release-minor
-release-minor:
-	- git checkout master
-	- git pull
-	- git tag -a v$(MINORVERSION) -m 'release $(MINORVERSION)'
-	- git push origin --tags
-.PHONY :release-patch
-.SILENT :release-patch
-release-patch:
-	- git checkout master
-	- git pull
-	- git tag -a v$(PATCHVERSION) -m 'release $(PATCHVERSION)'
-	- git push origin --tags
+include vars.mk
+include contrib/makefiles/pkg/base/base.mk
+include contrib/makefiles/pkg/string/string.mk
+include contrib/makefiles/pkg/color/color.mk
+include contrib/makefiles/pkg/functions/functions.mk
+include contrib/makefiles/targets/buildenv/buildenv.mk
+include contrib/makefiles/targets/git/git.mk
+include contrib/makefiles/targets/dependency/dependency.mk
+include contrib/makefiles/targets/python/python.mk
+THIS_FILE := $(firstword $(MAKEFILE_LIST))
+SELF_DIR := $(dir $(THIS_FILE))
+.PHONY:init
+.SILENT: init
+init:
+	- $(call print_running_target)
+	- @$(MAKE) --no-print-directory -f $(THIS_FILE) python-init
+	- $(call print_completed_target)
+.PHONY: run 
+.SILENT: run
+run: python-run-server
+	- $(call print_running_target)
+	- $(call print_completed_target)
+.PHONY:clean
+.SILENT: clean
+clean:
+	- $(call print_running_target)
+	- @$(MAKE) --no-print-directory -f $(THIS_FILE) python-clean
+	- $(call print_completed_target)
+.PHONY:  targets
+.SILENT: targets
+targets:
+	- $(call print_running_target)
+	- @$(MAKE) --no-print-directory -f $(THIS_FILE) python
+	- @$(MAKE) --no-print-directory -f $(THIS_FILE) dependency
+	- $(call print_completed_target)
