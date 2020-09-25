@@ -29,7 +29,7 @@ ifneq (${UPSTREAM_PORT}, )
 	- $(eval command=${command} --port ${UPSTREAM_PORT})
 endif
 	- $(eval command=${command} > $(PWD)/logs/upstream-server.log 2>&1 )
-	- $(eval command=${command} && popd)
+	- $(eval command=${command} && popd &)
 	- @$(MAKE) --no-print-directory -f $(THIS_FILE) shell cmd="${command}"
 	- @$(MAKE) --no-print-directory -f $(THIS_FILE) python-clean
 	- $(call print_completed_target)

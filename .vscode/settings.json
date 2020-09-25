@@ -46,6 +46,7 @@
         "spyderproject",
         "spyproject",
         "sqlite",
+        "uiversion",
         "urllib",
         "urllib3",
         "venv",

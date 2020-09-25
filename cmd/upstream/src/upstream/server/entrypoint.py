@@ -1,14 +1,34 @@
 #!/usr/bin/env python3
-
-# importing python standard libraries
-from .server import Server
+import pkg_resources
 import sys
 import logging
-# importing our libraries
+# [TODO] remove ...
+import os
+
+from functools import lru_cache
+from flask import Flask, redirect, Response
+from flasgger import Swagger
+
+from .server import Server
 from ..util.cli import *
 from ..util.log import *
+from .config import SWAGGER_CONFIG
 
 LOGGER = logging.getLogger(__name__)
+
+
+@lru_cache(maxsize=1)
+def tos():
+    # license = \
+    # pkg_resources.resource_string(__name__, '../LICENSE')
+    license = os.path.abspath('../LICENSE')
+    return Response(license, mimetype='text/plain')
+
+
+def create_endpoints(flask_app: Flask) -> None:
+    LOGGER.info("Creating API Endpoints")
+    flask_app.add_url_rule('/', 'index', lambda: redirect('apidocs'))
+    flask_app.add_url_rule('/tos', 'tos', tos)
 
 
 def __server_cli_entrypoint__(args):
@@ -34,6 +54,11 @@ def __server_cli_entrypoint__(args):
         # handling exception
         LOGGER.error("cannot start server to error : {}".format(e))
         sys.exit(-1)
+    flask_app = Flask(__name__)
+    flask_app.config['SWAGGER'] = SWAGGER_CONFIG
+    Swagger(flask_app)
+    create_endpoints(flask_app)
+    flask_app.run()
 
 
 def configure_parser(sub_parsers):
